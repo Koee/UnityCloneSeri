@@ -12,12 +12,15 @@ public class GameController : MonoBehaviour
     float m_spawnTime;
     bool m_isGameOver;
 
+    UIManage m_ui;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        m_ui = FindObjectOfType<UIManage>();
+        m_ui.SetScoreText("Score: " + m_score); // show điểm ở lần đầu
     }
 
     // Update is called once per frame
@@ -27,6 +30,7 @@ public class GameController : MonoBehaviour
         if (m_isGameOver) // kiem tra ket thuc game
         {
             m_spawnTime = 0;
+            m_ui.ShowGameoverPanel(true);// show msg panel khi thua 
             return;
         }
         //mong muốn 3s sẽ tạo ra 1 trái banh
@@ -46,10 +50,20 @@ public class GameController : MonoBehaviour
             Instantiate(ball, spwanPos, Quaternion.identity); // instantiate khởi tạo đối tượng  với các thông tin truyền vào [đối tượng muốn khởi tạo , vị trí, góc xoay đối tượng == với Quaternion.indentity = giữ nguyên]
         }
     }
-
+    public void Replay()
+    {
+        m_score = 0;
+        m_isGameOver = false;
+        m_ui.SetScoreText("Score: " + m_score);
+        m_ui.ShowGameoverPanel(false);
+    }
     public void SetScore(int value) { m_score = value; }
     public int GetScore() { return m_score; }
-    public void IncremenScore() { m_score++; }
+    public void IncremenScore()
+    {
+        m_score++;
+        m_ui.SetScoreText("Score : " + m_score);
+    }
     public bool IsGameover() { return m_isGameOver; }
     public void SetGameOverState(bool state) { m_isGameOver = state; }
 }
